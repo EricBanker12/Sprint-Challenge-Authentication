@@ -16,12 +16,12 @@ The Minimum Viable Product must be completed in three hours.
 
 Follow these steps to set up and work on your project:
 
-- [ ] Create a forked copy of this project.
-- [ ] Add your _Team Lead_ as collaborator on Github.
-- [ ] Clone your forked version of the Repository.
-- [ ] Create a new Branch on the clone: git checkout -b `firstName-lastName`.
-- [ ] Implement the project on this Branch, committing changes regularly.
-- [ ] Push commits: git push origin `firstName-lastName`.
+- [x] Create a forked copy of this project.
+- [x] Add your _Team Lead_ as collaborator on Github.
+- [x] Clone your forked version of the Repository.
+- [x] Create a new Branch on the clone: git checkout -b `firstName-lastName`.
+- [x] Implement the project on this Branch, committing changes regularly.
+- [x] Push commits: git push origin `firstName-lastName`.
 
 Follow these steps for completing your project.
 
@@ -38,13 +38,21 @@ Commit your code regularly and use descriptive messages. This helps both you (in
 
 Demonstrate your understanding of this week's concepts by answering the following free-form questions. Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your project manager.
 
-- [ ] What is the purpose of using _sessions_?
+- [x] What is the purpose of using _sessions_?
 
-- [ ] What does bcrypt do to help us store passwords in a secure manner.
+   Sessions are a method to track and differentiate different clients through cryptographically signed cookies.
 
-- [ ] What does bcrypt do to slow down attackers?
+- [x] What does bcrypt do to help us store passwords in a secure manner.
 
-- [ ] What are the three parts of the JSON Web Token?
+   `bcrypt` will allow us to hash passwords through many salt rounds, so if exposed, it would take a long time to brute-force reverse the hash by guessing the password.
+
+- [x] What does bcrypt do to slow down attackers?
+
+   It hashes with salt round, rehashing the previous hash `2^n` times. With a decently large `n` value, each attempt to guess a password will take several seconds, which makes brute-force attacks prohibitively time expensive.
+
+- [x] What are the three parts of the JSON Web Token?
+
+   The Header, containing algorithm and token type; the Payload, containing insensitive data we choose to store; and the Signature, a base64 string from header + payload and signed with a secret. Each part in the resulting JWT string is separated by a period (`.`).
 
 ## Minimum Viable Product
 
