@@ -11,6 +11,7 @@ module.exports = (req, res, next) => {
   }
 
   const authorization = req.headers.authorization
+  const secret = process.env.SECRET || 'secret key'
 
   jwt.verify(authorization, secret, (err, decoded) => {
     if (err) {
