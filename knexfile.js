@@ -9,7 +9,7 @@ module.exports = {
     },
     seeds: { directory: './database/seeds' },
   },
-  development: {
+  testing: {
     client: 'sqlite3',
     connection: { filename: './database/auth_testing.db3' },
     useNullAsDefault: true,
