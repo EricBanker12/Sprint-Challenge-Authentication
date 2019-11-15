@@ -18,6 +18,10 @@ router.post('/register', valReqBody, valUniqUser, hashPass, (req, res) => {
         res.status(201).json({message: `Hello ${username}.`, id, authorization})
       }
     })
+    .catch(err => {
+      console.log(err)
+      res.sendStatus(500)
+    })
 });
 
 router.post('/login', valReqBody, valUser, valPass, (req, res) => {

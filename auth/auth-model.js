@@ -7,8 +7,13 @@ module.exports = {
 }
 
 function add(user) {
-    return db('users').insert(user, 'id')
-        .then(([id]) => find({id}))
+    try {
+
+        return db('users').insert(user, 'id')
+            .then(([id]) => find({id}))
+    
+    }
+    catch(err) {throw err}
 }
 
 function find(filter) {
