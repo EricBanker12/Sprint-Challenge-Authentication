@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const jwt = require('jsonwebtoken')
 
 const usersDb = require('./auth-model')
 const {valReqBody, valUniqUser, hashPass} = require('./auth-middleware')
@@ -12,7 +13,9 @@ router.post('/register', valReqBody, valUniqUser, (req, res) => {
     .then(resp => {
       if (resp) {
         const {id, username} = resp
-        res.status(201).json({message: `Hello ${username}.`, id})
+        const secret = process.env.SECRET || 'secret key'
+        const authorization = jwt.sign({id}, secret, {expiresIn: '18h'})
+        res.status(201).json({message: `Hello ${username}.`, id, authorization})
       }
     })
 });
