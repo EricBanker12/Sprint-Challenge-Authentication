@@ -4,10 +4,10 @@ const jwt = require('jsonwebtoken')
 const usersDb = require('./auth-model')
 const {valReqBody, valUniqUser, hashPass, valUser, valPass} = require('./auth-middleware')
 
-router.post('/register', valReqBody, valUniqUser, (req, res) => {
+router.post('/register', valReqBody, valUniqUser, hashPass, (req, res) => {
   // implement registration
   const username = req.body.username
-  const password = hashPass(req.body.password)
+  const password = res.locals.hash
 
   usersDb.add({username, password})
     .then(resp => {
