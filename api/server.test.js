@@ -1,12 +1,13 @@
 const request = require('supertest')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const server = require('./server')
 const db = require('../database/dbConfig')
 
 describe('/api/auth', () => {
     
-    describe('/register', () => {
+    describe('POST /register', () => {
 
         beforeEach(() => db('users').truncate())
 
@@ -42,7 +43,7 @@ describe('/api/auth', () => {
         })
     })
 
-    describe('/login', () => {
+    describe('POST /login', () => {
 
         beforeEach(() => db('users').truncate())
 
@@ -84,6 +85,29 @@ describe('/api/auth', () => {
             await db('users').insert({username, password})
             return request(server).post('/api/auth/login').send({username, password: 'wrong'})
                 .expect(401)
+        })
+    })
+})
+
+describe('/api/jokes', () => {
+
+    describe('GET /', () => {
+
+        test('should return status 400 Bad Request without header', () => {
+            return request(server).get('/api/jokes/')
+                .expect(400)
+        })
+
+        test('should return status 401 Unauthorized with invalid header', () => {
+            return request(server).get('/api/jokes/').set('authorization', 'wrong')
+                .expect(401)
+        })
+
+        test('should return status 200 Ok with valid header', () => {
+            const secret = 'secret key'
+            const authorization = jwt.sign({id: 1}, secret, {expiresIn: '30s'})
+            return request(server).get('/api/jokes/').set('authorization', authorization)
+                .expect(200)
         })
     })
 })
