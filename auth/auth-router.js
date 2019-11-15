@@ -2,7 +2,7 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken')
 
 const usersDb = require('./auth-model')
-const {valReqBody, valUniqUser, hashPass} = require('./auth-middleware')
+const {valReqBody, valUniqUser, hashPass, valUser, valPass} = require('./auth-middleware')
 
 router.post('/register', valReqBody, valUniqUser, (req, res) => {
   // implement registration
@@ -20,8 +20,12 @@ router.post('/register', valReqBody, valUniqUser, (req, res) => {
     })
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', valReqBody, valUser, valPass, (req, res) => {
   // implement login
+  const {id, username} = res.locals.user
+  const secret = process.env.SECRET || 'secret key'
+  const authorization = jwt.sign({id}, secret, {expiresIn: '18h'})
+  res.status(200).json({message: `Hello ${username}.`, id, authorization})
 });
 
 module.exports = router;

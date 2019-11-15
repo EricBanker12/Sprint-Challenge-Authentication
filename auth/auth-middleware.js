@@ -5,7 +5,9 @@ const usersDb = require('./auth-model')
 module.exports = {
     valReqBody,
     valUniqUser,
-    hashPass
+    hashPass,
+    valUser,
+    valPass,
 }
 
 function valReqBody(req, res, next) {
@@ -36,7 +38,7 @@ function valUniqUser(req, res, next) {
 
 async function hashPass(req, res, next) {
     try {
-        
+
         if (typeof req === 'string') return await bcrypt.hash(req, 16)
 
         res.locals.hash = await bcrypt.hash(req.body.password,16)
@@ -46,4 +48,34 @@ async function hashPass(req, res, next) {
         next(err)
     }
 
+}
+
+function valUser(req, res, next) {
+    const username = req.body.username
+
+    usersDb.find({username})
+        .then(resp => {
+            if (resp) {
+                res.locals.user = resp
+                next()
+            }
+            else res.status(401).json({message: 'You shall not pass!'})
+        })
+        .catch(err => {
+            console.error(err)
+            res.sendStatus(500)
+        })
+}
+
+function valPass(req, res, next) {
+    bcrypt.compare(req.body.password, res.locals.user.password, (err, match) => {
+        if (err) {
+            console.error(err)
+            res.sendStatus(500)
+        }
+        else {
+            if (match) next()
+            else res.status(401).json({message: 'You shall not pass!'})
+        }
+    })
 }
